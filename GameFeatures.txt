@@ -1,0 +1,40 @@
+Possible Game Features
+
+
+Zoom in to 1st or 3rd person view when selecting a target to shoot(or some other action)
+
+Classes have specific stats
+	ie. Health, Movement(Speed), Accuracy, Armor(some kind of defense?)
+
+Calculate chance to hit
+	distance, cover(none, half, full), line of sight(might be too hard), accuracy rating
+
+Animate taking cover on objects if near one
+
+Enemy AI
+	because we are advancing on the enemy base, enemies are unaware until soldiers make contact
+
+	default Enemy AI(change this for different difficulties if we need)
+		priority
+
+		1) If flanked or out of cover, move to cover
+		2) move in range of player's characters if possible, while remaining in cover
+		3) attack character with highest % to hit
+		4) special abilities (if enemies have these, or they might just get more health and accuracy as the game goes on to make it more difficult)
+
+Universal Character Actions (characters have 2 actions to spend)
+	Move		-	1 action (basic move action)
+	Run		-	2 actions(2 seperate movements at once, reaction shot has less chance to hit)
+	Shoot		-	1 action (if this is done first should it end your turn?)
+	Lay Low		-	1 action (ends turn and gives a extra cover bonus)
+	Overwatch	-	1 action (end turn and allows a reaction shot)	- this might not be included depending on how hard it is to implement
+	Cover		-	2 actions(use 3x ammo of shoot, decreases accuracy and doesn't allow movement of target) - universal or heavy gunner only?
+
+Soldier Loadouts?
+	if so, classes are assigned to specific weapons and armor
+
+Classes (different names for any of these?)
+	Assault
+	Sniper
+	Medic
+	Heavy Weapons Specialist
