@@ -211,6 +211,22 @@ public class CharacterType1 : MonoBehaviour {
 		}
 	}
 	
+	//new method - Chris
+	//turns off connections of character to previous tile and sets them for the new tile
+	void MoveCharacter(string newTileName)
+	{
+		//turn off old position first so there is still reference to it
+		levelManager.GetComponent<BoardManager>().tiles[tilesIndex].GetComponent<GameTile>().isOccupied = false;
+		levelManager.GetComponent<BoardManager>().tiles[tilesIndex].GetComponent<GameTile>().isOccupiedByPlayer = false;
+		levelManager.GetComponent<BoardManager>().tiles[tilesIndex].GetComponent<GameTile>().SetCharacter(null);
+		
+		transform.position = GameObject.Find(newTileName).transform.position; //move the character to its new position
+		tilesIndex = int.Parse(newTileName.Substring(4));
+		levelManager.GetComponent<BoardManager>().tiles[tilesIndex].GetComponent<GameTile>().isOccupied = true;
+		levelManager.GetComponent<BoardManager>().tiles[tilesIndex].GetComponent<GameTile>().isOccupiedByPlayer = true;
+		levelManager.GetComponent<BoardManager>().tiles[tilesIndex].GetComponent<GameTile>().SetCharacter(gameObject);
+	}
+	
 	
 	
 	
