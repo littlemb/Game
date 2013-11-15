@@ -1,0 +1,13 @@
+Bugs
+
+Bug #: 		1
+Resolved:	No
+Problem:	The last move tile hovered over before entering combat mode will remain as
+			a movement tile in combat mode whenever the mouse is hovering over
+			the game board
+
+Bug #:		2
+Resolved:	No
+Problem:	Changing characters while in combat mode causes a lot of problems
+			(make this impossible to do)
+

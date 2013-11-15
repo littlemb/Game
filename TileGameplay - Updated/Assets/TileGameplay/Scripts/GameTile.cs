@@ -8,9 +8,14 @@ public class GameTile : MonoBehaviour {
 	public bool isOccupiedByPlayer; //the tile is occupied, is it occupied by a player? (if true, isOccupied is true)
 	public bool isOccupiedByEnemy; //the tile is occupied, is it occupied by an enemy? (if true, isOccupied is true)
 	
+	//new variables - Chris
+	public bool isOccupiedByObject;
+	public GameObject objectOnTile;
+	
 	//the character associated with this tile
 	//if this character dies or leaves this tile, set character to null
 	public GameObject characterOnTile;
+	
 	
 	public bool canMoveHere; //can a character move here?
 	public bool canShootHere;
@@ -107,5 +112,16 @@ public class GameTile : MonoBehaviour {
 	public bool GetOccupiedByPlayer()
 	{
 		return isOccupiedByPlayer;
+	}
+	
+	//new methods(2) - Chris
+	public GameObject GetObject()
+	{
+		return objectOnTile;
+	}
+	
+	public void SetObject(GameObject obstacle)
+	{
+		objectOnTile = obstacle;
 	}
 }
