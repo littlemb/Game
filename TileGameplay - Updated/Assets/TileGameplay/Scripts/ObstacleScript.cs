@@ -3,9 +3,15 @@ using System.Collections;
 
 public class ObstacleScript : MonoBehaviour {
 	
-	//tiles taken up; ie. 1x1, 2x2, 2x1
-	public int height;				// x-direction; positive to the right from the origin
-	public int width;				// y-direction; positive in the up direction from the origin
+	/*
+	 * The script is written to draw the bottom left corner of the object in the specified tile
+	 * 	Then it just moves up and to the right when increasing the length and width
+	 */
+	
+	//tiles taken up; ie. 1x1x4, 2x2x1, 2x1x1
+	public int length;				// x-direction; to the right
+	public int width;				// z-direction; up the board
+	public int height;				// y-direction; straight out from the board
 	
 	public int tileIndex;
 	private int tileBoardLength;
@@ -20,42 +26,38 @@ public class ObstacleScript : MonoBehaviour {
 		
 		string tileName;
 		tileName = "Tile" + tileIndex.ToString();
-		if(height == 1 && width == 1)
+		
+		Vector3 newPosition = GameObject.Find(tileName).transform.position;
+		Vector3 newScale = GameObject.Find(tileName).transform.localScale;
+		
+		//object size will be set here
+		newScale.x = (length*2.0f)-1;
+		newScale.y = height;
+		newScale.z = (width*2.0f)-1;
+		
+		//object position set here
+		newPosition.x = newPosition.x + length - 1.0f;
+		newPosition.z = newPosition.z + width - 1.0f;
+		
+		transform.localScale = newScale;
+		transform.position = newPosition;
+		
+		for(int j=0; j<length; j++)
 		{
-			transform.position = GameObject.Find(tileName).transform.position; //move the object to its start position
-			levelManager.GetComponent<BoardManager>().tiles[tileIndex].GetComponent<GameTile>().isOccupied = true;
-			levelManager.GetComponent<BoardManager>().tiles[tileIndex].GetComponent<GameTile>().isOccupiedByObject = true;
-			levelManager.GetComponent<BoardManager>().tiles[tileIndex].GetComponent<GameTile>().SetObject(gameObject);
-		}
-		else
-		{
-			Vector3 newPosition = GameObject.Find(tileName).transform.position;
-			
-			newPosition.x += (1/height);
-			newPosition.z += (1/width);
-			
-			transform.position = newPosition;
-			for(int i=0; i<height; i++)
-			{
-				levelManager.GetComponent<BoardManager>().tiles[tileIndex+(i*tileBoardLength)].GetComponent<GameTile>().isOccupied = true;
-				levelManager.GetComponent<BoardManager>().tiles[tileIndex+(i*tileBoardLength)].GetComponent<GameTile>().isOccupiedByObject = true;
-				levelManager.GetComponent<BoardManager>().tiles[tileIndex+(i*tileBoardLength)].GetComponent<GameTile>().SetObject(gameObject);
-			}
 			for(int i=0; i<width; i++)
 			{
-				levelManager.GetComponent<BoardManager>().tiles[tileIndex+i].GetComponent<GameTile>().isOccupied = true;
-				levelManager.GetComponent<BoardManager>().tiles[tileIndex+i].GetComponent<GameTile>().isOccupiedByObject = true;
-				levelManager.GetComponent<BoardManager>().tiles[tileIndex+i].GetComponent<GameTile>().SetObject(gameObject);
+				levelManager.GetComponent<BoardManager>().tiles[tileIndex+(i*tileBoardLength)+j].GetComponent<GameTile>().isOccupied = true;
+				levelManager.GetComponent<BoardManager>().tiles[tileIndex+(i*tileBoardLength)+j].GetComponent<GameTile>().isOccupiedByObject = true;
+				levelManager.GetComponent<BoardManager>().tiles[tileIndex+(i*tileBoardLength)+j].GetComponent<GameTile>().SetObject(gameObject);
 			}
-//			levelManager.GetComponent<BoardManager>().tiles[tileIndex].GetComponent<GameTile>().isOccupied = true;
-//			levelManager.GetComponent<BoardManager>().tiles[tileIndex].GetComponent<GameTile>().isOccupiedByObject = true;
-//			levelManager.GetComponent<BoardManager>().tiles[tileIndex].GetComponent<GameTile>().SetObject(gameObject);
 		}
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		
+		//this could be made to be destroyed
+		//shoot a rocket at it
+		//however, this would require a free-aiming rocket rather than just on enemies
 	}
 }
