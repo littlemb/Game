@@ -25,6 +25,8 @@ public class AnimateBoard : MonoBehaviour {
 	private bool rotatedUp = false;
 	private int rotateYCount = 0;
 	
+	private int dummyInt = 0;
+	
 	// Use this for initialization
 	void Start () 
 	{
@@ -37,8 +39,9 @@ public class AnimateBoard : MonoBehaviour {
 		//RotateAround
 		if(Input.GetKeyDown("r"))
 		{
-			if(rotating == true)
-				rotating = false;	
+			if(rotating == true || rotatingY == true)
+				//rotating = false;
+				dummyInt += 1;
 			else
 			{
 				rotating = true;
@@ -56,8 +59,9 @@ public class AnimateBoard : MonoBehaviour {
 		
 		if(Input.GetKeyDown("t"))
 		{
-			if(rotatingY == true)
-				rotatingY = false;
+			if(rotatingY == true || rotating == true)
+				//rotatingY = false;
+				dummyInt += 1;
 			else
 				rotatingY = true;
 		}

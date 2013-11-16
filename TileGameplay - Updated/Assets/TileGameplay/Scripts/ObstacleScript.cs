@@ -4,7 +4,7 @@ using System.Collections;
 public class ObstacleScript : MonoBehaviour {
 	
 	//tiles taken up; ie. 1x1, 2x2, 2x1
-	public int length;				// x-direction; positive to the right from the origin
+	public int height;				// x-direction; positive to the right from the origin
 	public int width;				// y-direction; positive in the up direction from the origin
 	
 	public int tileIndex;
@@ -20,7 +20,7 @@ public class ObstacleScript : MonoBehaviour {
 		
 		string tileName;
 		tileName = "Tile" + tileIndex.ToString();
-		if(length == 1 && width == 1)
+		if(height == 1 && width == 1)
 		{
 			transform.position = GameObject.Find(tileName).transform.position; //move the object to its start position
 			levelManager.GetComponent<BoardManager>().tiles[tileIndex].GetComponent<GameTile>().isOccupied = true;
@@ -31,11 +31,11 @@ public class ObstacleScript : MonoBehaviour {
 		{
 			Vector3 newPosition = GameObject.Find(tileName).transform.position;
 			
-			newPosition.x += (1/length);
+			newPosition.x += (1/height);
 			newPosition.z += (1/width);
 			
 			transform.position = newPosition;
-			for(int i=0; i<length; i++)
+			for(int i=0; i<height; i++)
 			{
 				levelManager.GetComponent<BoardManager>().tiles[tileIndex+(i*tileBoardLength)].GetComponent<GameTile>().isOccupied = true;
 				levelManager.GetComponent<BoardManager>().tiles[tileIndex+(i*tileBoardLength)].GetComponent<GameTile>().isOccupiedByObject = true;
