@@ -461,6 +461,14 @@ public class EnemyType1 : MonoBehaviour {
 	
 	void EnemyAI()
 	{
+		/*
+		 * AI Process of Thought
+		 * 
+		 * 1) Shoot player if in range
+		 * 2) Move towards enemy
+		 * 3) 
+		 */
+		
 		GameObject closePlayer = new GameObject();
 		float closest = 10000000;
 		foreach (GameObject player in players)

@@ -1,0 +1,8 @@
+To-Do list
+
+
+Enemy AI
+
+Shooting animation
+
+Character models and animation
