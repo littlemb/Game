@@ -61,6 +61,11 @@ public class CharacterType1 : MonoBehaviour {
 	//for turn management
 	public bool hasMoved = false;
 	
+	//for moving animation
+	public bool moving = false;
+	public string tempTileName;
+	public float distanceToTile;
+	
 	// Use this for initialization
 	void Start () 
 	{
@@ -83,7 +88,7 @@ public class CharacterType1 : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () 
+	void Update ()
 	{
 		if(health > 100)
 			health = 100;
@@ -96,6 +101,15 @@ public class CharacterType1 : MonoBehaviour {
 			Destroy(gameObject);
 		}
 		enemies = GameObject.FindGameObjectsWithTag("Enemy");
+		
+		
+		
+		if(moving)
+		{
+			MoveAnimation();
+		}
+		
+		
 
 		/**Testing movement types**/
 		/**
@@ -354,21 +368,34 @@ public class CharacterType1 : MonoBehaviour {
 		}
 	}
 	
-	//new method - Chris
-	//turns off connections of character to previous tile and sets them for the new tile
 	void MoveCharacter(string newTileName)
 	{
 		levelManager.GetComponent<BoardManager>().tiles[tilesIndex].GetComponent<GameTile>().isOccupied = false;
 		levelManager.GetComponent<BoardManager>().tiles[tilesIndex].GetComponent<GameTile>().isOccupiedByPlayer = false;
 		levelManager.GetComponent<BoardManager>().tiles[tilesIndex].GetComponent<GameTile>().SetCharacter(null);
 		
-		transform.position = GameObject.Find(newTileName).transform.position;
+		//transform.position = GameObject.Find(newTileName).transform.position;
 		
 		tilesIndex = int.Parse(newTileName.Substring(4));
 		levelManager.GetComponent<BoardManager>().tiles[tilesIndex].GetComponent<GameTile>().isOccupied = true;
 		levelManager.GetComponent<BoardManager>().tiles[tilesIndex].GetComponent<GameTile>().isOccupiedByPlayer = true;
 		levelManager.GetComponent<BoardManager>().tiles[tilesIndex].GetComponent<GameTile>().SetCharacter(gameObject);
+		
+		moving = true;
+		tempTileName = "Tile" + tilesIndex.ToString();
+		
 		hasMoved = true;
+	}
+	
+	void MoveAnimation()
+	{
+		distanceToTile = Vector3.Distance(transform.position, GameObject.Find(tempTileName).transform.position);
+		transform.position = Vector3.MoveTowards(transform.position, GameObject.Find(tempTileName).transform.position, 5.0f*Time.deltaTime);
+		if(distanceToTile < 0.01f)
+		{
+			transform.position = GameObject.Find(tempTileName).transform.position;
+			moving = false;
+		}
 	}
 	
 	// new method - Chris
