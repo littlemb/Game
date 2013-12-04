@@ -21,11 +21,24 @@ public class CameraControl : MonoBehaviour {
 	static GameObject[] enemies;
 	static GameObject[] players;
 	
+	
+	//enemy waiting variable
+	private bool waiting = false;
+	private bool enemyMoved = false;
+	private int waitTime = 120;
+	private int currEnemy = 0;
+	private int enemySize;
+	
+	
 	// Use this for initialization
 	void Start () 
 	{
 		prevHit = null;
 		movesRemaining = GameObject.FindGameObjectsWithTag ("Player").Length;
+		
+		
+		enemies = GameObject.FindGameObjectsWithTag("Enemy");
+		enemySize = GameObject.FindGameObjectsWithTag("Enemy").Length;
 	}
 	
 	// Update is called once per frame
@@ -51,21 +64,61 @@ public class CameraControl : MonoBehaviour {
 			}
 		}
 		//turn management
-		if(movesRemaining == 0)
+//		if(movesRemaining == 0)
+//		{
+//			//enemies = GameObject.FindGameObjectsWithTag("Enemy");
+//			foreach(GameObject enemy in enemies)
+//			{
+//				enemy.SendMessage("EnemyAI");
+//			}
+//			players = GameObject.FindGameObjectsWithTag("Player");
+//			foreach(GameObject player in players)
+//			{
+//				player.SendMessage("MovedFalse");
+//			}
+//			
+//		movesRemaining = GameObject.FindGameObjectsWithTag("Player").Length;
+//		}
+		if(movesRemaining == 0 && enemyMoved == false)
 		{
-			enemies = GameObject.FindGameObjectsWithTag("Enemy");
-			foreach(GameObject enemy in enemies)
-			{
-				enemy.SendMessage("EnemyAI");
-			}
-			players = GameObject.FindGameObjectsWithTag("Player");
-			foreach(GameObject player in players)
-			{
-				player.SendMessage("MovedFalse");
-			}
-			
-		movesRemaining = GameObject.FindGameObjectsWithTag("Player").Length;
+			waiting = true;
 		}
+		
+		if(movesRemaining == 0 && waitTime <= 0)
+		{
+			waiting = false;
+			enemies = GameObject.FindGameObjectsWithTag("Enemy");
+			enemySize = GameObject.FindGameObjectsWithTag("Enemy").Length;
+			if(currEnemy == enemySize)
+			{
+				waitTime = 120;
+				currEnemy = 0;
+				players = GameObject.FindGameObjectsWithTag("Player");
+				foreach(GameObject player in players)
+				{
+					player.SendMessage("MovedFalse");
+				}
+				enemyMoved = false;
+				movesRemaining = GameObject.FindGameObjectsWithTag("Player").Length;
+			}
+			else
+			{
+				waitTime = 120;
+				EnemyMove();
+				currEnemy++;
+			}
+		}
+		if(waiting)
+		{
+			waitTime--;
+		}
+		
+	}
+	
+	void EnemyMove()
+	{
+		enemies[currEnemy].SendMessage("EnemyAI");
+		waiting = true;
 	}
 	
 	//select the character we want to move
