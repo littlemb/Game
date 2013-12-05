@@ -36,6 +36,7 @@ public class EnemyType1 : MonoBehaviour {
     //for AI stuff
     public bool hasMoved = false;
     GameObject[] players;
+	private int playerCount;
 
 	//for moving animation
 	public bool moving = false;
@@ -66,21 +67,38 @@ public class EnemyType1 : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
-            if(health <= 0)
-            {
-                    levelManager.GetComponent<BoardManager>().tiles[tilesIndex].GetComponent<GameTile>().isOccupied = false;
-                    levelManager.GetComponent<BoardManager>().tiles[tilesIndex].GetComponent<GameTile>().isOccupiedByEnemy = false;
-                    levelManager.GetComponent<BoardManager>().tiles[tilesIndex].GetComponent<GameTile>().SetCharacter(null);
-                    Destroy(gameObject);
-            }
-            players = GameObject.FindGameObjectsWithTag("Player");
-	
-	
-			if(moving)
-			{
-				MoveAnimation();
-			}
+		if(health <= 0)
+		{
+		        levelManager.GetComponent<BoardManager>().tiles[tilesIndex].GetComponent<GameTile>().isOccupied = false;
+		        levelManager.GetComponent<BoardManager>().tiles[tilesIndex].GetComponent<GameTile>().isOccupiedByEnemy = false;
+		        levelManager.GetComponent<BoardManager>().tiles[tilesIndex].GetComponent<GameTile>().SetCharacter(null);
+		        Destroy(gameObject);
+		}
+		players = GameObject.FindGameObjectsWithTag("Player");
+		playerCount = GameObject.FindGameObjectsWithTag("Player").Length;
+		
+		transform.LookAt(ClosestPlayer().transform.position);
+		
+		if(moving)
+		{
+			MoveAnimation();
+		}
     }
+	
+	GameObject ClosestPlayer()
+	{
+		float minDistance = Vector3.Distance(transform.position, players[0].transform.position);
+		GameObject closestPlayer = players[0];
+		for(int i=1; i<playerCount; i++)
+		{
+			if(minDistance > Vector3.Distance(transform.position, players[i].transform.position))
+			{
+				minDistance = Vector3.Distance(transform.position, players[i].transform.position);
+				closestPlayer = players[i];
+			}
+		}
+		return closestPlayer;
+	}
     
     // New Method - Tom
     // GUI stuffs

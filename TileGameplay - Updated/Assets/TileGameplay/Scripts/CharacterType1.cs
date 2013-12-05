@@ -19,6 +19,7 @@ public class CharacterType1 : MonoBehaviour {
 	private GameObject levelManager;
 	
 	GameObject[] enemies;
+	private int enemyCount;
 	
 	//tile board length
 	private int tileBoardLength; //gets set inside the Start() function
@@ -101,27 +102,30 @@ public class CharacterType1 : MonoBehaviour {
 			Destroy(gameObject);
 		}
 		enemies = GameObject.FindGameObjectsWithTag("Enemy");
+		enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
 		
-		
+		transform.LookAt(ClosestEnemy().transform.position);
 		
 		if(moving)
 		{
 			MoveAnimation();
 		}
 		
-		
-
-		/**Testing movement types**/
-		/**
-		if(Input.GetKeyDown("h"))
+	}
+	
+	GameObject ClosestEnemy()
+	{
+		float minDistance = Vector3.Distance(transform.position, enemies[0].transform.position);
+		GameObject closestEnemy = enemies[0];
+		for(int i=1; i<enemyCount; i++)
 		{
-			MovementType1(3);
+			if(minDistance > Vector3.Distance(transform.position, enemies[i].transform.position))
+			{
+				minDistance = Vector3.Distance(transform.position, enemies[i].transform.position);
+				closestEnemy = enemies[i];
+			}
 		}
-		if(Input.GetKeyDown("j"))
-		{
-			MovementType2();	
-		}
-		**/
+		return closestEnemy;
 	}
 	
 	//handles any GUI updates associated with player characters.
