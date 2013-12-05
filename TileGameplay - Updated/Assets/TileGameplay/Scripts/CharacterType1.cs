@@ -67,6 +67,12 @@ public class CharacterType1 : MonoBehaviour {
 	public string tempTileName;
 	public float distanceToTile;
 	
+	//bullet Tracer stuff
+	private LineRenderer bulletTracer;
+	public Material trace;
+	private bool shooting = false;
+	private int shootCount = 5;
+	
 	// Use this for initialization
 	void Start () 
 	{
@@ -85,7 +91,16 @@ public class CharacterType1 : MonoBehaviour {
 
 		tileBoardLength = levelManager.GetComponent<BoardManager>().tileBoardLength; //make sure we have the exact same value from BoardManager.cs
 		health = startingHealth;
-
+		
+		
+		//bullet tracer initialize
+		bulletTracer = (LineRenderer)gameObject.AddComponent("LineRenderer");
+		bulletTracer.material = trace;
+		bulletTracer.castShadows = false;
+		bulletTracer.receiveShadows = false;
+		bulletTracer.SetWidth(1.0f, 1.0f);
+		bulletTracer.SetVertexCount(2);
+		bulletTracer.enabled = false;
 	}
 	
 	// Update is called once per frame
@@ -109,6 +124,18 @@ public class CharacterType1 : MonoBehaviour {
 		if(moving)
 		{
 			MoveAnimation();
+		}
+		
+		//bullet tracer timer
+		if(shooting)
+		{
+			shootCount--;
+			if(shootCount <= 0)
+			{
+				bulletTracer.enabled = false;
+				shooting = false;
+				shootCount = 5;
+			}
 		}
 		
 	}
@@ -393,6 +420,7 @@ public class CharacterType1 : MonoBehaviour {
 	
 	void MoveAnimation()
 	{
+		transform.LookAt(GameObject.Find(tempTileName).transform.position);
 		distanceToTile = Vector3.Distance(transform.position, GameObject.Find(tempTileName).transform.position);
 		transform.position = Vector3.MoveTowards(transform.position, GameObject.Find(tempTileName).transform.position, 5.0f*Time.deltaTime);
 		if(distanceToTile < 0.01f)
@@ -529,6 +557,16 @@ public class CharacterType1 : MonoBehaviour {
 			float damageToApply = damage*(1/enemyArmor);
 			enemyHealth = enemyHealth - damageToApply;
 			enemyCharacter.GetComponent<EnemyType1>().SetHealth(enemyHealth);
+			
+			//bullet tracer
+			bulletTracer.SetPosition(0, transform.position);
+			bulletTracer.SetPosition(1, enemyCharacter.transform.position);
+			bulletTracer.enabled = true;
+			shooting = true;
+
+			
+			
+			
 			if(gameObject.name == "PlayerHeavy" && gameObject.GetComponent<HeavyPlayer>().GetRocket())
 			{
 				StartCoroutine( "goBoom", enemyCharacter.transform.position);
@@ -552,6 +590,10 @@ public class CharacterType1 : MonoBehaviour {
 							damageToApply = damage*(1/enemyArmor)*areaMultiplier;
 							enemyHealth = enemyHealth - damageToApply;
 							enemyChar.GetComponent<EnemyType1>().SetHealth(enemyHealth);
+							
+//							bulletTracer.enabled = true;
+//							bulletTracer.SetPosition(0, transform.position);
+//							bulletTracer.SetPosition(1, enemyChar.transform.position);
 						}
 						else if(tile.GetComponent<GameTile>().GetCharacter().tag == "Player")
 						{

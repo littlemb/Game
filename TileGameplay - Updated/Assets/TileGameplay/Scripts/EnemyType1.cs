@@ -42,6 +42,12 @@ public class EnemyType1 : MonoBehaviour {
 	public bool moving = false;
 	public string tempTileName;
 	public float distanceToTile;
+	
+	//bullet Tracer stuff
+	private LineRenderer bulletTracer;
+	public Material trace;
+	private bool shooting = false;
+	private int shootCount = 5;
 
     
     // Use this for initialization
@@ -61,7 +67,15 @@ public class EnemyType1 : MonoBehaviour {
             tileBoardLength = levelManager.GetComponent<BoardManager>().tileBoardLength; //make sure we have the exact same value from BoardManager.cs
             health = startingHealth; //make sure current health is equal to starting health
             players = GameObject.FindGameObjectsWithTag("Player");
-
+		
+			//bullet tracer initialize
+			bulletTracer = (LineRenderer)gameObject.AddComponent("LineRenderer");
+			bulletTracer.material = trace;
+			bulletTracer.castShadows = false;
+			bulletTracer.receiveShadows = false;
+			bulletTracer.SetWidth(1.0f, 1.0f);
+			bulletTracer.SetVertexCount(2);
+			bulletTracer.enabled = false;
     }
     
     // Update is called once per frame
@@ -82,6 +96,18 @@ public class EnemyType1 : MonoBehaviour {
 		if(moving)
 		{
 			MoveAnimation();
+		}
+		
+		//bullet tracer timer
+		if(shooting)
+		{
+			shootCount--;
+			if(shootCount <= 0)
+			{
+				bulletTracer.enabled = false;
+				shooting = false;
+				shootCount = 5;
+			}
 		}
     }
 	
@@ -538,6 +564,12 @@ public class EnemyType1 : MonoBehaviour {
                                     playerHealth = playerHealth - damageToApply;
                                     closePlayer.GetComponent<CharacterType1>().SetHealth(playerHealth);
                                     hasMoved = true;
+					
+									//bullet tracer
+									bulletTracer.SetPosition(0, transform.position);
+									bulletTracer.SetPosition(1, closePlayer.transform.position);
+									bulletTracer.enabled = true;
+									shooting = true;
                             }
                     }
             }
